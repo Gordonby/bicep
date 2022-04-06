@@ -8,6 +8,13 @@ namespace Bicep.LanguageServer.Telemetry
 {
     public record BicepTelemetryEvent : TelemetryEventParams
     {
+        public static class Result
+        {
+            public const string Succeeded = "Succeeded";
+            public const string Canceled = "Canceled";
+            public const string Failed = "Failed";
+        }
+
         public string? EventName { get; set; }
 
         public Dictionary<string, string>? Properties { get; set; }
@@ -129,6 +136,16 @@ namespace Bicep.LanguageServer.Telemetry
             {
                 EventName = TelemetryConstants.EventNames.BicepFileOpen,
                 Properties = properties
+            };
+
+        public static BicepTelemetryEvent CreateDeployStart(string deployId)
+            => new BicepTelemetryEvent
+            {
+                EventName = TelemetryConstants.EventNames.DeployStart,
+                Properties = new()
+                {
+                    ["deployId"] = deployId
+                }
             };
 
         public static BicepTelemetryEvent CreateDeployResult(string deployId, string result)
